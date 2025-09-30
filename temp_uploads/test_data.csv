@@ -1,0 +1,4 @@
+name,email,department,position,salary
+John Doe,john.doe@example.com,Engineering,Software Engineer,80000
+Jane Smith,jane.smith@example.com,Marketing,Marketing Manager,75000
+Peter Jones,peter.jones@example.com,Sales,Sales Representative,60000

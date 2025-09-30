@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pagedb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  auth:
+    build: .
+    command: python auth/app.py
+    volumes:
+      - .:/app
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    environment:
+      PYTHONPATH: .
+      DATABASE_URL: postgresql://user:password@db:5432/pagedb
+
+  upload:
+    build: .
+    command: python upload/app.py
+    volumes:
+      - .:/app
+    ports:
+      - "5002:5002"
+    depends_on:
+      - db
+    environment:
+      PYTHONPATH: .
+      DATABASE_URL: postgresql://user:password@db:5432/pagedb
+
+volumes:
+  postgres_data:
